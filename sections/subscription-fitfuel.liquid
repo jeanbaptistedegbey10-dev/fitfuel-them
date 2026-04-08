@@ -1,0 +1,97 @@
+{% comment %}
+  FitFuel — Section Abonnement
+  Fichier : sections/subscription-fitfuel.liquid
+{% endcomment %}
+
+<section class="ff-section ff-section--dark" id="ff-subscription">
+  <div class="ff-section__inner" style="text-align: center;">
+
+    <span class="ff-eyebrow" style="color: var(--ff-green);">
+      {{ section.settings.eyebrow | default: 'Abonnement' }}
+    </span>
+
+    <h2 class="ff-title">
+      {{ section.settings.title_line1 | default: 'Ne' }}
+      <em class="green">{{ section.settings.title_line2 | default: 'manque' }}</em>
+      {{ section.settings.title_line3 | default: 'jamais' }}<br>
+      {{ section.settings.title_line4 | default: 'de fuel' }}
+    </h2>
+
+    <p class="ff-body" style="max-width: 500px; margin: 1rem auto 0;">
+      {{ section.settings.description | default: "Reçois tes compléments automatiquement chaque mois. Économise jusqu'à 20% et profite d'avantages exclusifs." }}
+    </p>
+
+    <div class="ff-sub-cards">
+
+      <!-- Plan achat unique -->
+      <div class="ff-sub-card">
+        <span class="ff-sub-card__plan">{{ section.settings.plan1_name | default: 'Achat unique' }}</span>
+        <p class="ff-sub-card__price">
+          <sup>{{ section.settings.currency | default: '€' }}</sup>{{ section.settings.plan1_price | default: '34' }}<small>/achat</small>
+        </p>
+        <ul class="ff-sub-card__features">
+          {%- assign features1 = section.settings.plan1_features | split: '|' -%}
+          {%- for feature in features1 -%}
+            <li>{{ feature | strip }}</li>
+          {%- else -%}
+            <li>Livraison standard (5–7 jours)</li>
+            <li>Garantie qualité 30 jours</li>
+            <li>Service client prioritaire</li>
+          {%- endfor -%}
+        </ul>
+        <button class="ff-sub-card__btn">{{ section.settings.plan1_cta | default: 'Acheter une fois' }}</button>
+      </div>
+
+      <!-- Plan abonnement -->
+      <div class="ff-sub-card ff-sub-card--featured">
+        <span class="ff-sub-card__plan">{{ section.settings.plan2_name | default: 'Abonnement mensuel' }}</span>
+        <p class="ff-sub-card__price">
+          <sup>{{ section.settings.currency | default: '€' }}</sup>{{ section.settings.plan2_price | default: '27' }}<small>/mois</small>
+        </p>
+        <span class="ff-badge ff-badge--saving">{{ section.settings.plan2_saving | default: 'Économise 20%' }}</span>
+        <ul class="ff-sub-card__features">
+          {%- assign features2 = section.settings.plan2_features | split: '|' -%}
+          {%- for feature in features2 -%}
+            <li>{{ feature | strip }}</li>
+          {%- else -%}
+            <li>Livraison prioritaire express (48h)</li>
+            <li>Accès aux nouveautés en avant-première</li>
+            <li>Gestion facile depuis ton dashboard</li>
+            <li>Pause ou annulation sans conditions</li>
+            <li>Points fidélité x2</li>
+          {%- endfor -%}
+        </ul>
+        <button class="ff-sub-card__btn">{{ section.settings.plan2_cta | default: "S'abonner maintenant" }}</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FitFuel Abonnement",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Abonnement" },
+    { "type": "text", "id": "title_line1", "label": "Titre mot 1", "default": "Ne" },
+    { "type": "text", "id": "title_line2", "label": "Titre mot 2 (vert)", "default": "manque" },
+    { "type": "text", "id": "title_line3", "label": "Titre mot 3", "default": "jamais" },
+    { "type": "text", "id": "title_line4", "label": "Titre ligne 2", "default": "de fuel" },
+    { "type": "textarea", "id": "description", "label": "Description" },
+    { "type": "text", "id": "currency", "label": "Symbole monnaie", "default": "€" },
+    { "type": "header", "content": "Plan 1 — Achat unique" },
+    { "type": "text", "id": "plan1_name", "label": "Nom du plan", "default": "Achat unique" },
+    { "type": "text", "id": "plan1_price", "label": "Prix", "default": "34" },
+    { "type": "textarea", "id": "plan1_features", "label": "Features (séparées par |)", "default": "Livraison standard (5–7 jours)|Garantie qualité 30 jours|Service client prioritaire" },
+    { "type": "text", "id": "plan1_cta", "label": "Texte bouton", "default": "Acheter une fois" },
+    { "type": "header", "content": "Plan 2 — Abonnement" },
+    { "type": "text", "id": "plan2_name", "label": "Nom du plan", "default": "Abonnement mensuel" },
+    { "type": "text", "id": "plan2_price", "label": "Prix", "default": "27" },
+    { "type": "text", "id": "plan2_saving", "label": "Badge économie", "default": "Économise 20%" },
+    { "type": "textarea", "id": "plan2_features", "label": "Features (séparées par |)", "default": "Livraison prioritaire express (48h)|Accès aux nouveautés en avant-première|Gestion facile depuis ton dashboard|Pause ou annulation sans conditions|Points fidélité x2" },
+    { "type": "text", "id": "plan2_cta", "label": "Texte bouton", "default": "S'abonner maintenant" }
+  ],
+  "presets": [{ "name": "FitFuel Abonnement" }]
+}
+{% endschema %}

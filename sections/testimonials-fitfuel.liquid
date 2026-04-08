@@ -1,0 +1,122 @@
+{% comment %}
+  FitFuel — Section Témoignages
+  Fichier : sections/testimonials-fitfuel.liquid
+{% endcomment %}
+
+<section class="ff-section" id="ff-testimonials">
+  <div class="ff-section__inner">
+
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <span class="ff-eyebrow">{{ section.settings.eyebrow | default: 'Témoignages' }}</span>
+      <h2 class="ff-title">
+        {{ section.settings.title_part1 | default: 'Ils ont' }}
+        <em>{{ section.settings.title_part2 | default: 'transformé' }}</em>
+        {{ section.settings.title_part3 | default: 'leur corpo' }}
+      </h2>
+    </div>
+
+    <div class="ff-testi-grid">
+
+      {%- for block in section.blocks -%}
+        <div class="ff-testi-card" {{ block.shopify_attributes }}>
+          <div class="ff-testi-card__stars">★★★★★</div>
+          <p class="ff-testi-card__text">"{{ block.settings.quote }}"</p>
+          <div class="ff-testi-card__author">
+            <div class="ff-testi-card__avatar">
+              {{ block.settings.name | slice: 0, 2 | upcase }}
+            </div>
+            <div>
+              <span class="ff-testi-card__name">{{ block.settings.name }}</span>
+              <span class="ff-testi-card__role">{{ block.settings.role }}</span>
+              {%- if block.settings.objective != blank -%}
+                <span class="ff-testi-card__objective ff-testi-card__objective--{{ block.settings.objective_color }}">
+                  {{ block.settings.objective }}
+                </span>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      {%- else -%}
+
+        <!-- Témoignages par défaut si aucun block configuré -->
+        <div class="ff-testi-card">
+          <div class="ff-testi-card__stars">★★★★★</div>
+          <p class="ff-testi-card__text">"Le quiz m'a recommandé exactement ce dont j'avais besoin. En 8 semaines, j'ai pris 3,5 kg de masse sèche. Résultats bluffants."</p>
+          <div class="ff-testi-card__author">
+            <div class="ff-testi-card__avatar">KD</div>
+            <div>
+              <span class="ff-testi-card__name">Kofi Dansou</span>
+              <span class="ff-testi-card__role">Étudiant STAPS, 22 ans</span>
+              <span class="ff-testi-card__objective ff-testi-card__objective--masse">Prise de masse</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ff-testi-card">
+          <div class="ff-testi-card__stars">★★★★★</div>
+          <p class="ff-testi-card__text">"FitFuel m'a fourni un plan clair, des produits de qualité, et l'abonnement simplifie tout. Je recommande à 100%."</p>
+          <div class="ff-testi-card__author">
+            <div class="ff-testi-card__avatar">AS</div>
+            <div>
+              <span class="ff-testi-card__name">Ama Sarpong</span>
+              <span class="ff-testi-card__role">Coach fitness, 29 ans</span>
+              <span class="ff-testi-card__objective ff-testi-card__objective--poids">Perte de poids</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ff-testi-card">
+          <div class="ff-testi-card__stars">★★★★★</div>
+          <p class="ff-testi-card__text">"Grâce au plan endurance de FitFuel, ma récupération s'est améliorée de façon spectaculaire. Le ThermoFuel m'aide à maintenir mon poids de course."</p>
+          <div class="ff-testi-card__author">
+            <div class="ff-testi-card__avatar">EK</div>
+            <div>
+              <span class="ff-testi-card__name">Edem Kodjo</span>
+              <span class="ff-testi-card__role">Runner amateur, 34 ans</span>
+              <span class="ff-testi-card__objective ff-testi-card__objective--endurance">Endurance</span>
+            </div>
+          </div>
+        </div>
+
+      {%- endfor -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FitFuel Témoignages",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Témoignages" },
+    { "type": "text", "id": "title_part1", "label": "Titre partie 1", "default": "Ils ont" },
+    { "type": "text", "id": "title_part2", "label": "Titre partie 2 (bleu)", "default": "transformé" },
+    { "type": "text", "id": "title_part3", "label": "Titre partie 3", "default": "leur corpo" }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Témoignage",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Citation" },
+        { "type": "text", "id": "name", "label": "Nom" },
+        { "type": "text", "id": "role", "label": "Rôle / Description" },
+        { "type": "text", "id": "objective", "label": "Objectif (badge)" },
+        {
+          "type": "select",
+          "id": "objective_color",
+          "label": "Couleur du badge",
+          "options": [
+            { "value": "masse", "label": "Bleu — Prise de masse" },
+            { "value": "poids", "label": "Vert — Perte de poids" },
+            { "value": "endurance", "label": "Or — Endurance" }
+          ],
+          "default": "masse"
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "FitFuel Témoignages" }]
+}
+{% endschema %}

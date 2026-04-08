@@ -1,0 +1,86 @@
+{% comment %}
+  FitFuel — Section Quiz Teaser
+  Fichier : sections/quiz-teaser.liquid
+{% endcomment %}
+
+<section class="ff-section ff-section--quiz" id="ff-quiz">
+  <div class="ff-section__inner">
+    <div class="ff-quiz-teaser__grid">
+
+      <!-- Côté gauche : texte -->
+      <div class="ff-quiz-teaser__left">
+        <span class="ff-eyebrow">{{ section.settings.eyebrow | default: 'Quiz intelligent' }}</span>
+        <h2 class="ff-title">
+          {{ section.settings.title_line1 | default: 'On te guide' }}<br>
+          <em class="green">{{ section.settings.title_line2 | default: 'pas à pas' }}</em>
+        </h2>
+        <p class="ff-body" style="max-width: 440px; margin-bottom: 2rem;">
+          {{ section.settings.description | default: "Chaque corps est différent. En 2 minutes, notre quiz analyse ton profil et te recommande exactement ce dont tu as besoin — sans te perdre dans les rayons." }}
+        </p>
+        <button class="ff-btn ff-btn--primary" data-quiz-open>
+          {{ section.settings.cta_text | default: 'Commencer le quiz' }}
+        </button>
+      </div>
+
+      <!-- Côté droit : étapes -->
+      <div class="ff-quiz-teaser__steps">
+
+        <div class="ff-quiz-teaser__step">
+          <span class="ff-quiz-teaser__step-num">01</span>
+          <div>
+            <p class="ff-quiz-teaser__step-title">{{ section.settings.step1_title | default: 'Ton objectif' }}</p>
+            <p class="ff-quiz-teaser__step-sub">{{ section.settings.step1_sub | default: 'Prise de masse, perte de poids, endurance...' }}</p>
+          </div>
+        </div>
+
+        <div class="ff-quiz-teaser__step">
+          <span class="ff-quiz-teaser__step-num">02</span>
+          <div>
+            <p class="ff-quiz-teaser__step-title">{{ section.settings.step2_title | default: 'Ton niveau' }}</p>
+            <p class="ff-quiz-teaser__step-sub">{{ section.settings.step2_sub | default: 'Débutant, intermédiaire ou confirmé' }}</p>
+          </div>
+        </div>
+
+        <div class="ff-quiz-teaser__step">
+          <span class="ff-quiz-teaser__step-num">03</span>
+          <div>
+            <p class="ff-quiz-teaser__step-title">{{ section.settings.step3_title | default: 'Ton rythme' }}</p>
+            <p class="ff-quiz-teaser__step-sub">{{ section.settings.step3_sub | default: "Fréquence d'entraînement hebdomadaire" }}</p>
+          </div>
+        </div>
+
+        <div class="ff-quiz-teaser__step">
+          <span class="ff-quiz-teaser__step-num">04</span>
+          <div>
+            <p class="ff-quiz-teaser__step-title">{{ section.settings.step4_title | default: 'Ton plan personnalisé' }}</p>
+            <p class="ff-quiz-teaser__step-sub">{{ section.settings.step4_sub | default: 'Produits + protocole recommandés' }}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FitFuel Quiz Teaser",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Quiz intelligent" },
+    { "type": "text", "id": "title_line1", "label": "Titre ligne 1", "default": "On te guide" },
+    { "type": "text", "id": "title_line2", "label": "Titre ligne 2 (vert)", "default": "pas à pas" },
+    { "type": "textarea", "id": "description", "label": "Description" },
+    { "type": "text", "id": "cta_text", "label": "Texte bouton", "default": "Commencer le quiz" },
+    { "type": "text", "id": "step1_title", "label": "Étape 1 titre", "default": "Ton objectif" },
+    { "type": "text", "id": "step1_sub", "label": "Étape 1 sous-titre", "default": "Prise de masse, perte de poids, endurance..." },
+    { "type": "text", "id": "step2_title", "label": "Étape 2 titre", "default": "Ton niveau" },
+    { "type": "text", "id": "step2_sub", "label": "Étape 2 sous-titre", "default": "Débutant, intermédiaire ou confirmé" },
+    { "type": "text", "id": "step3_title", "label": "Étape 3 titre", "default": "Ton rythme" },
+    { "type": "text", "id": "step3_sub", "label": "Étape 3 sous-titre", "default": "Fréquence d'entraînement hebdomadaire" },
+    { "type": "text", "id": "step4_title", "label": "Étape 4 titre", "default": "Ton plan personnalisé" },
+    { "type": "text", "id": "step4_sub", "label": "Étape 4 sous-titre", "default": "Produits + protocole recommandés" }
+  ],
+  "presets": [{ "name": "FitFuel Quiz Teaser" }]
+}
+{% endschema %}

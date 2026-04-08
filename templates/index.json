@@ -1,20 +1,41 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
+    "hero": {
+      "type": "hero-fitfuel",
+      "settings": {}
+    },
+    "quiz-teaser": {
+      "type": "quiz-teaser",
+      "settings": {}
+    },
+    "featured-products": {
+      "type": "featured-products-fitfuel",
+      "settings": {
+        "collection": "all",
+        "products_limit": 4,
+        "filter_tags": "Protéines, Gainers, Brûleurs, Vitamines",
+        "show_cta": true
+      }
+    },
+    "subscription": {
+      "type": "subscription-fitfuel",
+      "settings": {}
+    },
+    "testimonials": {
+      "type": "testimonials-fitfuel",
+      "settings": {}
+    },
+    "cta-banner": {
+      "type": "cta-banner-fitfuel",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "hero",
+    "quiz-teaser",
+    "featured-products",
+    "subscription",
+    "testimonials",
+    "cta-banner"
   ]
 }

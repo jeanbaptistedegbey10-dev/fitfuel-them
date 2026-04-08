@@ -1,0 +1,42 @@
+{% comment %}
+  FitFuel — Section CTA Banner
+  Fichier : sections/cta-banner-fitfuel.liquid
+{% endcomment %}
+
+<section class="ff-section" id="ff-cta-banner" style="padding-bottom: 7rem;">
+  <div class="ff-section__inner">
+    <div class="ff-cta-banner">
+      <div class="ff-cta-banner__bg"></div>
+
+      <div class="ff-cta-banner__content">
+        <h2 class="ff-title" style="font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 0.7rem;">
+          {{ section.settings.title_line1 | default: 'Prêt à passer' }}<br>
+          <em class="green">{{ section.settings.title_line2 | default: 'au niveau sup ?' }}</em>
+        </h2>
+        <p class="ff-body">
+          {{ section.settings.description | default: "Rejoins 12 000+ athlètes qui ont déjà trouvé leur plan optimal avec FitFuel." }}
+        </p>
+      </div>
+
+      <div class="ff-cta-banner__actions">
+        <button class="ff-btn ff-btn--primary" data-quiz-open>
+          {{ section.settings.cta_text | default: 'Trouver mon plan' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FitFuel CTA Banner",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "title_line1", "label": "Titre ligne 1", "default": "Prêt à passer" },
+    { "type": "text", "id": "title_line2", "label": "Titre ligne 2 (vert)", "default": "au niveau sup ?" },
+    { "type": "textarea", "id": "description", "label": "Description" },
+    { "type": "text", "id": "cta_text", "label": "Texte bouton", "default": "Trouver mon plan" }
+  ],
+  "presets": [{ "name": "FitFuel CTA Banner" }]
+}
+{% endschema %}

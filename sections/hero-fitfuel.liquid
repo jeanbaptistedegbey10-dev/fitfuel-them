@@ -1,0 +1,191 @@
+{% comment %}
+  FitFuel — Hero Section
+  Fichier : sections/hero-fitfuel.liquid
+  Ajoute cette section dans templates/index.json
+{% endcomment %}
+
+<section class="ff-section ff-hero" id="ff-hero">
+  <div class="ff-hero__bg"></div>
+  <div class="ff-hero__grid"></div>
+<div class="ff-hero__inner">
+  <div class="ff-hero__content">
+
+    <span class="ff-hero__tag ff-fade-up">
+      {{ section.settings.tag_text | default: 'Nutrition sportive premium' }}
+    </span>
+
+    <h1 class="ff-title ff-title--hero ff-fade-up ff-delay-1">
+      {{ section.settings.hero_line1 | default: 'Atteins' }}<br>
+      tes <em>{{ section.settings.hero_line2 | default: 'objectifs' }}</em><br>
+      {{ section.settings.hero_line3 | default: 'plus vite' }}
+    </h1>
+
+    <p class="ff-body ff-fade-up ff-delay-2" style="max-width: 500px;">
+      {{ section.settings.hero_subtitle | default: 'Des compléments alimentaires sélectionnés par des experts. Un plan personnalisé en 2 minutes. Des résultats mesurables.' }}
+    </p>
+
+    <div class="ff-hero__ctas ff-fade-up ff-delay-3">
+      <a href="{{ section.settings.cta_quiz_url | default: '/pages/quiz' }}" class="ff-btn ff-btn--primary" id="ff-open-quiz">
+        {{ section.settings.cta_quiz_text | default: 'Trouver mon plan' }}
+      </a>
+      <a href="{{ section.settings.cta_products_url | default: '/collections/all' }}" class="ff-btn ff-btn--outline">
+        {{ section.settings.cta_products_text | default: 'Voir les produits' }}
+      </a>
+    </div>
+
+    <div class="ff-hero__stats ff-fade-up ff-delay-4">
+      <div>
+        <span class="ff-hero__stat-num">
+          {{ section.settings.stat1_number | default: '12' }}<span>{{ section.settings.stat1_suffix | default: 'K+' }}</span>
+        </span>
+        <span class="ff-hero__stat-label">{{ section.settings.stat1_label | default: 'Clients actifs' }}</span>
+      </div>
+      <div>
+        <span class="ff-hero__stat-num">
+          {{ section.settings.stat2_number | default: '97' }}<span>{{ section.settings.stat2_suffix | default: '%' }}</span>
+        </span>
+        <span class="ff-hero__stat-label">{{ section.settings.stat2_label | default: 'Satisfaction client' }}</span>
+      </div>
+      <div>
+        <span class="ff-hero__stat-num">
+          {{ section.settings.stat3_number | default: '48' }}<span>{{ section.settings.stat3_suffix | default: 'H' }}</span>
+        </span>
+        <span class="ff-hero__stat-label">{{ section.settings.stat3_label | default: 'Livraison express' }}</span>
+      </div>
+    </div>
+
+  </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FitFuel Hero",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Texte Hero"
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Tag au-dessus du titre",
+      "default": "Nutrition sportive premium"
+    },
+    {
+      "type": "text",
+      "id": "hero_line1",
+      "label": "Titre — ligne 1",
+      "default": "Atteins"
+    },
+    {
+      "type": "text",
+      "id": "hero_line2",
+      "label": "Titre — ligne 2 (en bleu)",
+      "default": "objectifs"
+    },
+    {
+      "type": "text",
+      "id": "hero_line3",
+      "label": "Titre — ligne 3",
+      "default": "plus vite"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Sous-titre",
+      "default": "Des compléments alimentaires sélectionnés par des experts. Un plan personnalisé en 2 minutes. Des résultats mesurables."
+    },
+    {
+      "type": "header",
+      "content": "Boutons CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_quiz_text",
+      "label": "Texte bouton quiz",
+      "default": "Trouver mon plan"
+    },
+    {
+      "type": "url",
+      "id": "cta_quiz_url",
+      "label": "Lien bouton quiz"
+    },
+    {
+      "type": "text",
+      "id": "cta_products_text",
+      "label": "Texte bouton produits",
+      "default": "Voir les produits"
+    },
+    {
+      "type": "url",
+      "id": "cta_products_url",
+      "label": "Lien bouton produits"
+    },
+    {
+      "type": "header",
+      "content": "Statistiques"
+    },
+    {
+      "type": "text",
+      "id": "stat1_number",
+      "label": "Stat 1 — Nombre",
+      "default": "12"
+    },
+    {
+      "type": "text",
+      "id": "stat1_suffix",
+      "label": "Stat 1 — Suffixe",
+      "default": "K+"
+    },
+    {
+      "type": "text",
+      "id": "stat1_label",
+      "label": "Stat 1 — Label",
+      "default": "Clients actifs"
+    },
+    {
+      "type": "text",
+      "id": "stat2_number",
+      "label": "Stat 2 — Nombre",
+      "default": "97"
+    },
+    {
+      "type": "text",
+      "id": "stat2_suffix",
+      "label": "Stat 2 — Suffixe",
+      "default": "%"
+    },
+    {
+      "type": "text",
+      "id": "stat2_label",
+      "label": "Stat 2 — Label",
+      "default": "Satisfaction client"
+    },
+    {
+      "type": "text",
+      "id": "stat3_number",
+      "label": "Stat 3 — Nombre",
+      "default": "48"
+    },
+    {
+      "type": "text",
+      "id": "stat3_suffix",
+      "label": "Stat 3 — Suffixe",
+      "default": "H"
+    },
+    {
+      "type": "text",
+      "id": "stat3_label",
+      "label": "Stat 3 — Label",
+      "default": "Livraison express"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FitFuel Hero"
+    }
+  ]
+}
+{% endschema %}

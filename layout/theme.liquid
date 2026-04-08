@@ -1,36 +1,209 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html class="no-js" lang="{{ request.locale.iso_code }}">
   <head>
-    {% # Inlined CSS Variables %}
-    {% render 'css-variables' %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#080A0E">
 
-    {% comment %}
-      Font preloading:
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
-      3. Additional variants load on-demand via @font-face
-    {% endcomment %}
-    {% unless settings.type_primary_font.system? %}
+    {%- unless settings.type_header_font.system? -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
 
-      {% comment %} Preload the base font variant for initial page render {% endcomment %}
-      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
 
-    {% # Load and preload the critical CSS %}
-    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
 
-    {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+
     {{ content_for_header }}
+
+    {%- liquid
+      assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+      assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+      assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+    %}
+
+    {% style %}
+      {{ settings.type_body_font | font_face: font_display: 'swap' }}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+      {{ body_font_italic | font_face: font_display: 'swap' }}
+      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+    {% endstyle %}
+
+    {{- 'critical.css' | asset_url | stylesheet_tag -}}
+    {{- 'fitfuel.css' | asset_url | stylesheet_tag -}}
+    {{- 'fitfuel.js' | asset_url | stylesheet_tag -}}
+
+
+    <style>
+  /* Neutralise la grille 2 colonnes de Dawn */
+  .shopify-section        { display: block !important; grid-template-columns: unset !important; }
+  .shopify-section > *    { grid-column: unset !important; }
+  
+  /* Cache la nav et header Dawn natifs */
+  header-drawer,
+  .header-wrapper,
+  sticky-header           { display: none !important; }
+  
+  body                    { margin: 0; padding: 0; overflow-x: hidden; }
+  main#MainContent        { padding: 0 !important; margin: 0 !important; width: 100% !important; }
+</style>
   </head>
 
-  <body>
-    {% sections 'header-group' %}
+  <body class="gradient">
 
-    {{ content_for_layout }}
+    <!-- ==========================================
+         NAV FITFUEL
+         ========================================== -->
+    <div class="ff-nav-wrapper" id="ff-nav">
+      <nav class="ff-nav">
 
-    {% sections 'footer-group' %}
+        <a href="{{ routes.root_url }}" class="ff-logo">
+          Fit<span>Fuel</span>
+        </a>
+
+        <ul class="ff-nav__links">
+          <li><a href="{{ routes.collections_url }}">Produits</a></li>
+          <li><a href="{{ pages['quiz'].url | default: '/pages/quiz' }}">Quiz</a></li>
+          <li><a href="#ff-subscription">Abonnement</a></li>
+          <li><a href="{{ pages['blog'].url | default: '/blogs/nutrition' }}">Blog</a></li>
+        </ul>
+
+        <div class="ff-nav__actions">
+          {%- if customer -%}
+            <a href="{{ routes.account_url }}" class="ff-nav__ghost">
+              {{ customer.first_name }}
+            </a>
+          {%- else -%}
+            <a href="{{ routes.account_login_url }}" class="ff-nav__ghost">
+              Connexion
+            </a>
+          {%- endif -%}
+
+          <a href="{{ routes.cart_url }}" class="ff-nav__cart-btn ff-cart-count">
+            Panier ({{ cart.item_count }})
+          </a>
+        </div>
+
+      </nav>
+    </div>
+    <!-- /nav -->
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1" style="padding-top:0;padding-left:0;padding-right:0;margin:0;max-width:100%;width:100%;">
+      {{ content_for_layout }}
+    </main>
+
+    <!-- ==========================================
+         FOOTER FITFUEL
+         ========================================== -->
+    <footer class="ff-footer" role="contentinfo">
+      <div class="ff-footer__grid">
+
+        <div class="ff-footer__brand">
+          <a href="{{ routes.root_url }}" class="ff-logo">Fit<span>Fuel</span></a>
+          <p class="ff-footer__tagline">
+            La nutrition sportive intelligente pour ceux qui veulent des résultats réels, pas des promesses.
+          </p>
+          <div class="ff-footer__social">
+            <a href="#" class="ff-footer__social-btn" aria-label="Instagram">IG</a>
+            <a href="#" class="ff-footer__social-btn" aria-label="TikTok">TK</a>
+            <a href="#" class="ff-footer__social-btn" aria-label="YouTube">YT</a>
+            <a href="#" class="ff-footer__social-btn" aria-label="Facebook">FB</a>
+          </div>
+        </div>
+
+        <div class="ff-footer__col">
+          <h4 class="ff-footer__col-title">Produits</h4>
+          <ul>
+            <li><a href="/collections/proteines">Protéines</a></li>
+            <li><a href="/collections/gainers">Gainers</a></li>
+            <li><a href="/collections/bruleurs">Brûleurs</a></li>
+            <li><a href="/collections/vitamines">Vitamines</a></li>
+            <li><a href="/collections/all">Tous les produits</a></li>
+          </ul>
+        </div>
+
+        <div class="ff-footer__col">
+          <h4 class="ff-footer__col-title">Mon compte</h4>
+          <ul>
+            {%- if customer -%}
+              <li><a href="{{ routes.account_url }}">Mon profil</a></li>
+              <li><a href="{{ routes.account_url }}/orders">Mes commandes</a></li>
+              <li><a href="{{ routes.account_logout_url }}">Déconnexion</a></li>
+            {%- else -%}
+              <li><a href="{{ routes.account_login_url }}">Connexion</a></li>
+              <li><a href="{{ routes.account_register_url }}">Créer un compte</a></li>
+            {%- endif -%}
+            <li><a href="/pages/quiz">Mon quiz</a></li>
+          </ul>
+        </div>
+
+        <div class="ff-footer__col">
+          <h4 class="ff-footer__col-title">Infos</h4>
+          <ul>
+            <li><a href="/blogs/nutrition">Blog nutrition</a></li>
+            <li><a href="/pages/a-propos">À propos</a></li>
+            <li><a href="/pages/contact">Contact</a></li>
+            <li><a href="/pages/livraison">Livraison & retours</a></li>
+            <li><a href="/policies/terms-of-service">CGV</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="ff-footer__bottom">
+        <p>&copy; {{ 'now' | date: '%Y' }} FitFuel. Tous droits réservés.</p>
+        <div class="ff-footer__payments">
+          <span class="ff-footer__payment-badge">VISA</span>
+          <span class="ff-footer__payment-badge">MC</span>
+          <span class="ff-footer__payment-badge">PAYPAL</span>
+          <span class="ff-footer__payment-badge">APPLE PAY</span>
+        </div>
+      </div>
+    </footer>
+    <!-- /footer -->
+
+    <!-- ==========================================
+         QUIZ OVERLAY (présent sur toutes les pages)
+         ========================================== -->
+    <div class="ff-quiz-overlay" id="ff-quiz-overlay" role="dialog" aria-modal="true" aria-label="Quiz personnalisé">
+      <div class="ff-quiz-modal">
+        <button class="ff-quiz-modal__close" onclick="ffCloseQuiz()" aria-label="Fermer">✕</button>
+
+        <div class="ff-quiz-progress">
+          <div class="ff-quiz-progress__bar" id="ff-quiz-progress-bar" style="width: 25%;"></div>
+        </div>
+
+        <div id="ff-quiz-content">
+          <!-- Rempli dynamiquement par fitfuel.js -->
+        </div>
+      </div>
+    </div>
+    <!-- /quiz overlay -->
+
+    <script src="{{ 'fitfuel.js' | asset_url }}" defer></script>
+    <script>
+      /* Mettre à jour le compteur panier au chargement */
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('/cart.js')
+          .then(r => r.json())
+          .then(cart => {
+            var el = document.querySelector('.ff-cart-count');
+            if (el) el.textContent = 'Panier (' + cart.item_count + ')';
+          });
+      });
+    </script>
+
   </body>
 </html>

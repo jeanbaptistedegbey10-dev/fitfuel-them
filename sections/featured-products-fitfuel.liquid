@@ -1,0 +1,239 @@
+{% comment %}
+  FitFuel — Section Produits Populaires
+  Fichier : sections/featured-products-fitfuel.liquid
+  Utilise les vrais produits Shopify via Liquid
+{% endcomment %}
+
+<section class="ff-section" id="ff-products">
+  <div class="ff-section__inner">
+
+    <div class="ff-section__header">
+      <div>
+        <span class="ff-eyebrow">{{ section.settings.eyebrow | default: 'Notre catalogue' }}</span>
+        <h2 class="ff-title" style="font-size: clamp(2rem, 4vw, 3rem);">
+          {{ section.settings.title_part1 | default: 'Produits' }}
+          <em>{{ section.settings.title_part2 | default: 'populaires' }}</em>
+        </h2>
+      </div>
+
+      <div class="ff-filters" id="ff-product-filters">
+        <button class="ff-filter-btn active" data-filter="all">Tous</button>
+        {% assign tags = section.settings.filter_tags | split: ',' %}
+        {%- for tag in filter_tags_array -%}
+          <button class="ff-filter-btn" data-filter="{{ tag | strip | downcase }}">{{ tag | strip }}</button>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="ff-products-grid" id="ff-products-grid">
+
+      {%- assign featured_collection = collections[section.settings.collection] -%}
+
+      {%- if featured_collection != blank -%}
+
+        {%- for product in featured_collection.products limit: section.settings.products_limit -%}
+
+          {%- assign product_tags_lower = product.tags | join: ',' | downcase -%}
+
+          <a
+            href="{{ product.url }}"
+            class="ff-product-card"
+            data-tags="{{ product_tags_lower }}"
+          >
+
+            {%- comment %} Badge {%- endcomment %}
+            {%- if product.tags contains 'nouveau' or product.tags contains 'new' -%}
+              <span class="ff-product-card__badge ff-badge ff-badge--new">Nouveau</span>
+            {%- elsif product.tags contains 'populaire' or product.tags contains 'popular' -%}
+              <span class="ff-product-card__badge ff-badge ff-badge--popular">Populaire</span>
+            {%- elsif product.compare_at_price > product.price -%}
+              {%- assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+              <span class="ff-product-card__badge ff-badge ff-badge--sale">-{{ discount }}%</span>
+            {%- endif -%}
+
+            {%- comment %} Image {%- endcomment %}
+            {%- comment %} Version compatible sans erreur de pipe {% endcomment -%}
+<div class="ff-product-card__img">
+  {%- if product.featured_image -%}
+    <img 
+      src="{{ product.featured_image | image_url: width: 600 }}" 
+      alt="{{ product.featured_image.alt | escape }}"
+      loading="lazy"
+      class="fitfuel-product-image"
+      width="600"
+      height="600"
+    >
+  {%- else -%}
+    <div class="ff-product-card__img--placeholder">
+      {{ product.title | upcase | truncate: 12 }}
+    </div>
+  {%- endif -%}
+</div>
+
+            {%- comment %} Body {%- endcomment %}
+            <div class="ff-product-card__body">
+
+              {%- assign product_type = product.type | default: product.tags | first -%}
+              <span class="ff-product-card__category">{{ product_type }}</span>
+
+              <span class="ff-product-card__title">{{ product.title }}</span>
+
+              {%- comment %} Stars (statiques pour l'instant, remplacées par Judge.me) {%- endcomment %}
+              <div class="ff-product-card__stars">
+                ★★★★★
+                <span>({{ product.metafields.reviews.rating_count | default: '–' }})</span>
+              </div>
+
+              <span class="ff-product-card__desc">
+                {{ product.description | strip_html | truncate: 90 }}
+              </span>
+
+              <div class="ff-product-card__footer">
+                <div>
+                  <span class="ff-product-card__price">
+                    {{ product.price | money }}
+                  </span>
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="ff-product-card__price-compare">
+                      {{ product.compare_at_price | money }}
+                    </span>
+                  {%- endif -%}
+                </div>
+                <button
+                  class="ff-product-card__cta"
+                  aria-label="Ajouter {{ product.title }} au panier"
+                  data-product-id="{{ product.variants.first.id }}"
+                  onclick="ffAddToCart(event, this)"
+                >
+                  +
+                </button>
+              </div>
+
+            </div>
+          </a>
+
+        {%- endfor -%}
+
+      {%- else -%}
+
+        {%- comment %} Fallback si la collection n'existe pas encore {%- endcomment %}
+        {%- for i in (1..4) -%}
+          {%- assign placeholders = 'Whey Pure Pro,Mass Builder X,ThermoFuel Elite,MultiSport Complex' | split: ',' -%}
+          {%- assign prices = '34.90,47.90,29.90,22.90' | split: ',' -%}
+          {%- assign categories = 'Protéines,Gainers,Brûleurs,Vitamines' | split: ',' -%}
+          <div class="ff-product-card">
+            <div class="ff-product-card__img ff-product-card__img--placeholder">
+              {{ categories[forloop.index0] | upcase }}
+            </div>
+            <div class="ff-product-card__body">
+              <span class="ff-product-card__category">{{ categories[forloop.index0] }}</span>
+              <span class="ff-product-card__title">{{ placeholders[forloop.index0] }}</span>
+              <div class="ff-product-card__stars">★★★★★ <span>(–)</span></div>
+              <span class="ff-product-card__desc">Produit de démonstration. Ajoutez vos produits dans l'admin Shopify.</span>
+              <div class="ff-product-card__footer">
+                <span class="ff-product-card__price">{{ prices[forloop.index0] }}€</span>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+
+      {%- endif -%}
+
+    </div>
+
+    {%- if section.settings.show_cta -%}
+      <div style="text-align: center; margin-top: 3rem;">
+        <a href="{{ section.settings.cta_url | default: '/collections/all' }}" class="ff-btn ff-btn--outline">
+          {{ section.settings.cta_text | default: 'Voir tous les produits' }}
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FitFuel Produits",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection à afficher"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Nombre de produits",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Textes"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Sous-titre au-dessus",
+      "default": "Notre catalogue"
+    },
+    {
+      "type": "text",
+      "id": "title_part1",
+      "label": "Titre — partie 1",
+      "default": "Produits"
+    },
+    {
+      "type": "text",
+      "id": "title_part2",
+      "label": "Titre — partie 2 (en bleu)",
+      "default": "populaires"
+    },
+    {
+      "type": "header",
+      "content": "Filtres"
+    },
+    {
+      "type": "text",
+      "id": "filter_tags",
+      "label": "Tags de filtre (séparés par virgule)",
+      "default": "Protéines, Gainers, Brûleurs, Vitamines",
+      "info": "Ces tags doivent correspondre aux tags de tes produits Shopify"
+    },
+    {
+      "type": "header",
+      "content": "Bouton Voir tout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Afficher le bouton",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texte du bouton",
+      "default": "Voir tous les produits"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Lien du bouton"
+    }
+  ],
+  "presets": [
+    {
+      "name": "FitFuel Produits"
+    }
+  ]
+}
+{% endschema %}
