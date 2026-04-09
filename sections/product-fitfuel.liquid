@@ -1,0 +1,483 @@
+{% comment %}
+  FitFuel — Page Produit
+  Fichier : sections/product-fitfuel.liquid
+{% endcomment %}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<section class="ff-section ff-product-page" id="ff-product">
+  <div class="ff-section__inner">
+
+    <!-- Breadcrumb -->
+    <nav class="ff-breadcrumb">
+      <a href="/" class="ff-breadcrumb__link">Accueil</a>
+      <span class="ff-breadcrumb__sep">›</span>
+      <a href="/collections/all" class="ff-breadcrumb__link">Produits</a>
+      <span class="ff-breadcrumb__sep">›</span>
+      <span class="ff-breadcrumb__current">{{ product.title }}</span>
+    </nav>
+
+    <!-- Layout principal -->
+    <div class="ff-product-page__layout">
+
+      <!-- Galerie images -->
+      <div class="ff-product-gallery">
+        <div class="ff-product-gallery__main">
+          {%- if product.featured_image -%}
+            <img
+              id="ff-gallery-main"
+              src="{{ product.featured_image | image_url: width: 800 }}"
+              alt="{{ product.featured_image.alt | escape }}"
+              width="800"
+              height="800"
+              loading="eager"
+            >
+          {%- else -%}
+            <div class="ff-product-gallery__placeholder">
+              {{ product.title | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+
+          {%- if product.compare_at_price > product.price -%}
+            {%- assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+            <span class="ff-badge ff-badge--sale ff-product-gallery__badge">-{{ discount }}%</span>
+          {%- endif -%}
+        </div>
+
+        {%- if product.images.size > 1 -%}
+          <div class="ff-product-gallery__thumbs">
+            {%- for image in product.images limit: 5 -%}
+              <button
+                class="ff-product-gallery__thumb {% if forloop.first %}is-active{% endif %}"
+                onclick="ffSwitchImage(this, '{{ image | image_url: width: 800 }}')"
+              >
+                <img
+                  src="{{ image | image_url: width: 120 }}"
+                  alt="{{ image.alt | escape }}"
+                  loading="lazy"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Infos produit -->
+      <div class="ff-product-info">
+
+        <span class="ff-eyebrow">{{ product.type | default: product.tags | first }}</span>
+        <h1 class="ff-title" style="font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 0.5rem;">
+          {{ product.title }}
+        </h1>
+
+        <!-- Stars -->
+        <div class="ff-product-info__stars">
+          <span class="ff-product-card__stars" style="font-size: 1rem;">★★★★★</span>
+          <span style="font-size: 0.85rem; color: var(--ff-text-muted); margin-left: 6px;">
+            {{ product.metafields.reviews.rating_count | default: '–' }} avis
+          </span>
+        </div>
+
+        <!-- Prix -->
+        <div class="ff-product-info__price">
+          <span class="ff-product-info__price-current">{{ current_variant.price | money }}</span>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="ff-product-info__price-compare">{{ current_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+        </div>
+
+        <!-- Toggle achat unique / abonnement -->
+        <div class="ff-product-info__purchase-type">
+          <button
+            class="ff-purchase-toggle is-active"
+            id="ff-toggle-once"
+            onclick="ffTogglePurchase('once')"
+          >
+            Achat unique
+          </button>
+          <button
+            class="ff-purchase-toggle"
+            id="ff-toggle-sub"
+            onclick="ffTogglePurchase('sub')"
+          >
+            Abonnement mensuel
+            <span class="ff-badge ff-badge--saving" style="margin-left: 6px;">-20%</span>
+          </button>
+        </div>
+
+        <p class="ff-product-info__sub-note" id="ff-sub-note" style="display: none;">
+          🔄 Tu seras débité automatiquement chaque mois. Annulation à tout moment.
+        </p>
+
+        <!-- Variantes -->
+        {%- unless product.has_only_default_variant -%}
+          <div class="ff-product-info__variants">
+            {%- for option in product.options_with_values -%}
+              <div class="ff-product-info__option">
+                <label class="ff-product-info__option-label">{{ option.name }}</label>
+                <div class="ff-product-info__option-values">
+                  {%- for value in option.values -%}
+                    <button
+                      class="ff-variant-btn {% if option.selected_value == value %}is-active{% endif %}"
+                      onclick="ffSelectVariant('{{ option.name }}', '{{ value }}')"
+                    >{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endunless -%}
+
+        <!-- Quantité + Add to cart -->
+        <div class="ff-product-info__add">
+          <div class="ff-quantity">
+            <button class="ff-quantity__btn" onclick="ffChangeQty(-1)">−</button>
+            <input
+              class="ff-quantity__input"
+              id="ff-qty"
+              type="number"
+              value="1"
+              min="1"
+              max="99"
+              readonly
+            >
+            <button class="ff-quantity__btn" onclick="ffChangeQty(1)">+</button>
+          </div>
+
+          <button
+            class="ff-btn ff-btn--primary ff-product-info__atc"
+            id="ff-atc-btn"
+            onclick="ffProductAddToCart()"
+            data-variant-id="{{ current_variant.id }}"
+          >
+            {%- if current_variant.available -%}
+              Ajouter au panier
+            {%- else -%}
+              Rupture de stock
+            {%- endif -%}
+          </button>
+        </div>
+
+        <!-- Garanties -->
+        <div class="ff-product-info__guarantees">
+          <div class="ff-guarantee">
+            <span class="ff-guarantee__icon">🚚</span>
+            <span class="ff-guarantee__text">Livraison gratuite dès 50€</span>
+          </div>
+          <div class="ff-guarantee">
+            <span class="ff-guarantee__icon">✅</span>
+            <span class="ff-guarantee__text">Satisfait ou remboursé 30 jours</span>
+          </div>
+          <div class="ff-guarantee">
+            <span class="ff-guarantee__icon">🔒</span>
+            <span class="ff-guarantee__text">Paiement 100% sécurisé</span>
+          </div>
+        </div>
+
+        <!-- Description courte -->
+        {%- if product.description != blank -%}
+          <div class="ff-product-info__desc">
+            {{ product.description | split: '<!--more-->' | first }}
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+
+    <!-- Tabs : Description / Bénéfices / Usage -->
+    <div class="ff-product-tabs">
+      <div class="ff-product-tabs__nav">
+        <button class="ff-tab-btn is-active" onclick="ffSwitchTab(this, 'description')">Description</button>
+        <button class="ff-tab-btn" onclick="ffSwitchTab(this, 'benefits')">Bénéfices</button>
+        <button class="ff-tab-btn" onclick="ffSwitchTab(this, 'usage')">Comment utiliser</button>
+        <button class="ff-tab-btn" onclick="ffSwitchTab(this, 'faq')">FAQ</button>
+      </div>
+
+      <div class="ff-tab-content is-active" id="ff-tab-description">
+        <div class="ff-product-desc">
+          {%- if product.description != blank -%}
+            {{ product.description }}
+          {%- else -%}
+            <p style="color: var(--ff-text-muted);">Aucune description disponible pour ce produit.</p>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="ff-tab-content" id="ff-tab-benefits">
+        <div class="ff-benefits-grid">
+          {%- assign benefits = product.metafields.custom.benefits | default: '' -%}
+          {%- if benefits != blank -%}
+            {{ benefits }}
+          {%- else -%}
+            <div class="ff-benefit-item">
+              <span class="ff-benefit-icon">💪</span>
+              <div>
+                <p class="ff-benefit-title">Performance optimisée</p>
+                <p class="ff-benefit-sub">Formulé pour maximiser tes résultats à l'entraînement</p>
+              </div>
+            </div>
+            <div class="ff-benefit-item">
+              <span class="ff-benefit-icon">🧬</span>
+              <div>
+                <p class="ff-benefit-title">Qualité premium</p>
+                <p class="ff-benefit-sub">Ingrédients sélectionnés par nos experts en nutrition</p>
+              </div>
+            </div>
+            <div class="ff-benefit-item">
+              <span class="ff-benefit-icon">⚡</span>
+              <div>
+                <p class="ff-benefit-title">Absorption rapide</p>
+                <p class="ff-benefit-sub">Assimilation optimale par l'organisme</p>
+              </div>
+            </div>
+            <div class="ff-benefit-item">
+              <span class="ff-benefit-icon">✓</span>
+              <div>
+                <p class="ff-benefit-title">Testé et certifié</p>
+                <p class="ff-benefit-sub">Produit conforme aux normes européennes</p>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="ff-tab-content" id="ff-tab-usage">
+        <div class="ff-usage">
+          {%- assign usage = product.metafields.custom.usage | default: '' -%}
+          {%- if usage != blank -%}
+            {{ usage }}
+          {%- else -%}
+            <div class="ff-usage-step">
+              <span class="ff-usage-step__num">1</span>
+              <div>
+                <p class="ff-usage-step__title">Timing</p>
+                <p class="ff-usage-step__desc">Consommer de préférence dans les 30 minutes suivant l'entraînement pour une récupération optimale.</p>
+              </div>
+            </div>
+            <div class="ff-usage-step">
+              <span class="ff-usage-step__num">2</span>
+              <div>
+                <p class="ff-usage-step__title">Dosage</p>
+                <p class="ff-usage-step__desc">1 à 2 doses par jour selon ton poids et tes objectifs. Débuter par 1 dose pour évaluer la tolérance.</p>
+              </div>
+            </div>
+            <div class="ff-usage-step">
+              <span class="ff-usage-step__num">3</span>
+              <div>
+                <p class="ff-usage-step__title">Préparation</p>
+                <p class="ff-usage-step__desc">Mélanger avec 250-300ml d'eau froide ou de lait. Agiter vigoureusement pendant 30 secondes.</p>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="ff-tab-content" id="ff-tab-faq">
+        <div class="ff-faq">
+
+          {%- assign faq_items = section.blocks | where: 'type', 'faq' -%}
+          {%- if faq_items.size > 0 -%}
+            {%- for block in faq_items -%}
+              <div class="ff-faq__item" {{ block.shopify_attributes }}>
+                <button class="ff-faq__question" onclick="ffToggleFaq(this)">
+                  {{ block.settings.question }}
+                  <span class="ff-faq__chevron">+</span>
+                </button>
+                <div class="ff-faq__answer">
+                  <p>{{ block.settings.answer }}</p>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            <div class="ff-faq__item">
+              <button class="ff-faq__question" onclick="ffToggleFaq(this)">
+                Ce produit convient-il aux débutants ?
+                <span class="ff-faq__chevron">+</span>
+              </button>
+              <div class="ff-faq__answer">
+                <p>Oui, ce produit est adapté à tous les niveaux. Nous recommandons de commencer par une demi-dose pour les débutants afin d'évaluer la tolérance individuelle.</p>
+              </div>
+            </div>
+            <div class="ff-faq__item">
+              <button class="ff-faq__question" onclick="ffToggleFaq(this)">
+                Combien de temps avant de voir des résultats ?
+                <span class="ff-faq__chevron">+</span>
+              </button>
+              <div class="ff-faq__answer">
+                <p>Les premiers effets sont généralement visibles après 3 à 4 semaines d'utilisation régulière, combinée à un entraînement adapté et une alimentation équilibrée.</p>
+              </div>
+            </div>
+            <div class="ff-faq__item">
+              <button class="ff-faq__question" onclick="ffToggleFaq(this)">
+                Peut-on combiner ce produit avec d'autres suppléments ?
+                <span class="ff-faq__chevron">+</span>
+              </button>
+              <div class="ff-faq__answer">
+                <p>Oui, ce produit se combine parfaitement avec notre gamme FitFuel. Consulte notre quiz pour obtenir un plan personnalisé multi-produits adapté à tes objectifs.</p>
+              </div>
+            </div>
+            <div class="ff-faq__item">
+              <button class="ff-faq__question" onclick="ffToggleFaq(this)">
+                Quelle est la politique de retour ?
+                <span class="ff-faq__chevron">+</span>
+              </button>
+              <div class="ff-faq__answer">
+                <p>Satisfaction garantie 30 jours. Si tu n'es pas satisfait, contacte notre service client pour un remboursement complet, sans questions.</p>
+              </div>
+            </div>
+          {%- endif -%}
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Produits similaires -->
+    {%- assign related_products = collections['all'].products | where: 'type', product.type -%}
+    {%- assign related_count = 0 -%}
+    {%- for rp in related_products -%}
+      {%- if rp.id != product.id -%}
+        {%- assign related_count = related_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if related_count > 0 -%}
+      <div class="ff-related">
+        <div style="margin-bottom: 2rem;">
+          <span class="ff-eyebrow">Dans la même gamme</span>
+          <h2 class="ff-title" style="font-size: 2.5rem;">Tu pourrais <em>aussi aimer</em></h2>
+        </div>
+        <div class="ff-products-grid">
+          {%- assign shown = 0 -%}
+          {%- for rp in related_products -%}
+            {%- if rp.id != product.id and shown < 4 -%}
+              <a href="{{ rp.url }}" class="ff-product-card">
+                <div class="ff-product-card__img">
+                  {%- if rp.featured_image -%}
+                    <img src="{{ rp.featured_image | image_url: width: 400 }}" alt="{{ rp.featured_image.alt | escape }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+                  {%- else -%}
+                    {{ rp.title | placeholder_svg_tag: 'placeholder-svg' }}
+                  {%- endif -%}
+                </div>
+                <div class="ff-product-card__body">
+                  <span class="ff-product-card__category">{{ rp.type }}</span>
+                  <span class="ff-product-card__title">{{ rp.title }}</span>
+                  <div class="ff-product-card__footer" style="margin-top: 0.8rem;">
+                    <span class="ff-product-card__price">{{ rp.price | money }}</span>
+                  </div>
+                </div>
+              </a>
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+// Galerie images
+function ffSwitchImage(btn, src) {
+  document.getElementById('ff-gallery-main').src = src;
+  document.querySelectorAll('.ff-product-gallery__thumb').forEach(t => t.classList.remove('is-active'));
+  btn.classList.add('is-active');
+}
+
+// Toggle achat unique / abonnement
+function ffTogglePurchase(type) {
+  const noteEl = document.getElementById('ff-sub-note');
+  document.querySelectorAll('.ff-purchase-toggle').forEach(b => b.classList.remove('is-active'));
+  if (type === 'sub') {
+    document.getElementById('ff-toggle-sub').classList.add('is-active');
+    noteEl.style.display = 'block';
+  } else {
+    document.getElementById('ff-toggle-once').classList.add('is-active');
+    noteEl.style.display = 'none';
+  }
+}
+
+// Quantité
+function ffChangeQty(delta) {
+  const input = document.getElementById('ff-qty');
+  const newVal = Math.max(1, Math.min(99, parseInt(input.value) + delta));
+  input.value = newVal;
+}
+
+// Add to cart produit
+async function ffProductAddToCart() {
+  const btn = document.getElementById('ff-atc-btn');
+  const variantId = btn.dataset.variantId;
+  const qty = parseInt(document.getElementById('ff-qty').value);
+  if (!variantId) return;
+
+  btn.disabled = true;
+  btn.textContent = 'Ajout en cours...';
+
+  try {
+    const res = await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: qty })
+    });
+    if (!res.ok) throw new Error();
+    btn.textContent = '✓ Ajouté au panier !';
+    btn.style.background = 'var(--ff-green)';
+    await ffUpdateCartCount();
+    setTimeout(() => {
+      btn.textContent = 'Ajouter au panier';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 2000);
+  } catch {
+    btn.textContent = 'Erreur — réessaie';
+    btn.style.background = 'var(--ff-red)';
+    setTimeout(() => {
+      btn.textContent = 'Ajouter au panier';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 1500);
+  }
+}
+
+// Tabs
+function ffSwitchTab(btn, tabId) {
+  document.querySelectorAll('.ff-tab-btn').forEach(b => b.classList.remove('is-active'));
+  document.querySelectorAll('.ff-tab-content').forEach(c => c.classList.remove('is-active'));
+  btn.classList.add('is-active');
+  document.getElementById('ff-tab-' + tabId).classList.add('is-active');
+}
+
+// FAQ accordion
+function ffToggleFaq(btn) {
+  const item = btn.closest('.ff-faq__item');
+  const isOpen = item.classList.contains('is-open');
+  document.querySelectorAll('.ff-faq__item').forEach(i => i.classList.remove('is-open'));
+  if (!isOpen) item.classList.add('is-open');
+  btn.querySelector('.ff-faq__chevron').textContent = isOpen ? '+' : '−';
+}
+
+// Variantes
+function ffSelectVariant(optionName, value) {
+  document.querySelectorAll('.ff-variant-btn').forEach(b => b.classList.remove('is-active'));
+  event.target.classList.add('is-active');
+}
+</script>
+
+{% schema %}
+{
+  "name": "FitFuel Product",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "textarea", "id": "answer", "label": "Réponse" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "FitFuel Product" }]
+}
+{% endschema %}

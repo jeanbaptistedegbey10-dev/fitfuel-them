@@ -1,20 +1,33 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "product",
+    "product-fitfuel": {
+      "type": "product-fitfuel",
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "question": "Ce produit convient-il aux débutants ?",
+            "answer": "Oui, ce produit est adapté à tous les niveaux. Nous recommandons de commencer par une demi-dose pour évaluer la tolérance individuelle."
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "question": "Combien de temps avant de voir des résultats ?",
+            "answer": "Les premiers effets sont généralement visibles après 3 à 4 semaines d'utilisation régulière, combinée à un entraînement adapté."
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "question": "Peut-on combiner avec d'autres suppléments ?",
+            "answer": "Oui, nos produits se combinent parfaitement. Utilise notre quiz pour obtenir un plan personnalisé multi-produits."
+          }
+        }
+      },
+      "block_order": ["faq-1", "faq-2", "faq-3"],
       "settings": {}
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["product-fitfuel"]
 }

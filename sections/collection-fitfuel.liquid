@@ -1,0 +1,186 @@
+{% comment %}
+  FitFuel — Page Collection
+  Fichier : sections/collection-fitfuel.liquid
+{% endcomment %}
+
+<section class="ff-section ff-collection" id="ff-collection">
+  <div class="ff-section__inner">
+
+    <!-- Header collection -->
+    <div class="ff-collection__header">
+      <div class="ff-collection__header-left">
+        <span class="ff-eyebrow">{{ collection.title }}</span>
+        <h1 class="ff-title" style="font-size: clamp(2rem, 4vw, 3.5rem);">
+          {%- if collection.handle == 'all' -%}
+            Tous les <em>produits</em>
+          {%- else -%}
+            {{ collection.title | split: ' ' | first }}
+            <em>{{ collection.title | split: ' ' | last }}</em>
+          {%- endif -%}
+        </h1>
+        <p class="ff-body" style="margin-top: 0.5rem;">
+          {{ collection.products_count }}
+          {%- if collection.products_count == 1 -%} produit disponible
+          {%- else -%} produits disponibles
+          {%- endif -%}
+        </p>
+      </div>
+
+      <!-- Sort -->
+      <div class="ff-collection__sort">
+        <label class="ff-collection__sort-label">Trier par</label>
+        <select class="ff-collection__sort-select" onchange="ffSortCollection(this.value)">
+          <option value="best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>Popularité</option>
+          <option value="price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>Prix croissant</option>
+          <option value="price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>Prix décroissant</option>
+          <option value="created-descending" {% if collection.sort_by == 'created-descending' %}selected{% endif %}>Nouveautés</option>
+          <option value="title-ascending" {% if collection.sort_by == 'title-ascending' %}selected{% endif %}>A → Z</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Filtres tags -->
+    <div class="ff-collection__filters">
+      <a
+        href="{{ collection.url }}"
+        class="ff-filter-btn {% unless current_tags %}active{% endunless %}"
+      >Tous</a>
+
+      {%- assign filter_tags = 'Protéines,Gainers,Brûleurs,Vitamines' | split: ',' -%}
+      {%- for tag in filter_tags -%}
+        {%- assign tag_handle = tag | downcase -%}
+        <a
+          href="{{ collection.url }}/{{ tag_handle }}"
+          class="ff-filter-btn {% if current_tags contains tag %}active{% endif %}"
+        >{{ tag }}</a>
+      {%- endfor -%}
+    </div>
+
+    <!-- Grille produits -->
+    {%- paginate collection.products by section.settings.products_per_page -%}
+
+      {%- if collection.products.size > 0 -%}
+
+        <div class="ff-products-grid ff-collection__grid">
+          {%- for product in collection.products -%}
+
+            {%- assign tags_lower = product.tags | join: ',' | downcase -%}
+            {%- assign card_color = '0,212,255' -%}
+            {%- if tags_lower contains 'gainer' -%}{%- assign card_color = '0,255,135' -%}
+            {%- elsif tags_lower contains 'brul' -%}{%- assign card_color = '255,71,87' -%}
+            {%- elsif tags_lower contains 'vitamine' -%}{%- assign card_color = '255,184,0' -%}
+            {%- endif -%}
+
+            <a href="{{ product.url }}" class="ff-product-card">
+
+              {%- if product.tags contains 'nouveau' or product.tags contains 'new' -%}
+                <span class="ff-product-card__badge ff-badge ff-badge--new">Nouveau</span>
+              {%- elsif product.tags contains 'populaire' -%}
+                <span class="ff-product-card__badge ff-badge ff-badge--popular">Populaire</span>
+              {%- elsif product.compare_at_price > product.price -%}
+                {%- assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+                <span class="ff-product-card__badge ff-badge ff-badge--sale">-{{ discount }}%</span>
+              {%- endif -%}
+
+              <div class="ff-product-card__img" style="background: linear-gradient(145deg, rgba({{ card_color }},0.12), rgba({{ card_color }},0.03));">
+                {%- if product.featured_image -%}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 600 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    loading="lazy"
+                    style="width:100%;height:100%;object-fit:cover;display:block;"
+                  >
+                {%- else -%}
+                  {{ product.title | placeholder_svg_tag: 'placeholder-svg' }}
+                {%- endif -%}
+              </div>
+
+              <div class="ff-product-card__body">
+                <span class="ff-product-card__category">{{ product.type | default: product.tags | first }}</span>
+                <span class="ff-product-card__title">{{ product.title }}</span>
+                <div class="ff-product-card__stars">★★★★★ <span>({{ product.metafields.reviews.rating_count | default: '–' }})</span></div>
+                <span class="ff-product-card__desc">{{ product.description | strip_html | truncate: 85 }}</span>
+                <div class="ff-product-card__footer">
+                  <div>
+                    <span class="ff-product-card__price">{{ product.price | money }}</span>
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="ff-product-card__price-compare">{{ product.compare_at_price | money }}</span>
+                    {%- endif -%}
+                  </div>
+                  <button
+                    class="ff-product-card__cta"
+                    data-product-id="{{ product.variants.first.id }}"
+                    onclick="ffAddToCart(event, this)"
+                    aria-label="Ajouter au panier"
+                  >+</button>
+                </div>
+              </div>
+
+            </a>
+
+          {%- endfor -%}
+        </div>
+
+        <!-- Pagination -->
+        {%- if paginate.pages > 1 -%}
+          <div class="ff-pagination">
+            {%- if paginate.previous -%}
+              <a href="{{ paginate.previous.url }}" class="ff-pagination__btn">← Précédent</a>
+            {%- endif -%}
+
+            <div class="ff-pagination__pages">
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}" class="ff-pagination__page">{{ part.title }}</a>
+                {%- else -%}
+                  <span class="ff-pagination__page ff-pagination__page--active">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            {%- if paginate.next -%}
+              <a href="{{ paginate.next.url }}" class="ff-pagination__btn">Suivant →</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+      {%- else -%}
+
+        <div class="ff-collection__empty">
+          <p>Aucun produit trouvé dans cette collection.</p>
+          <a href="/collections/all" class="ff-btn ff-btn--outline">Voir tous les produits</a>
+        </div>
+
+      {%- endif -%}
+
+    {%- endpaginate -%}
+
+  </div>
+</section>
+
+<script>
+function ffSortCollection(value) {
+  const url = new URL(window.location.href);
+  url.searchParams.set('sort_by', value);
+  window.location.href = url.toString();
+}
+</script>
+
+{% schema %}
+{
+  "name": "FitFuel Collection",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "label": "Produits par page",
+      "default": 12
+    }
+  ],
+  "presets": [{ "name": "FitFuel Collection" }]
+}
+{% endschema %}
