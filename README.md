@@ -1,160 +1,117 @@
-<h1 align="center" style="position: relative;">
-  <br>
-    <img src="./assets/shoppy-x-ray.svg" alt="logo" width="200">
-  <br>
-  Shopify Skeleton Theme
-</h1>
+# FitFuel — Shopify Theme Custom
 
-A minimal, carefully structured Shopify theme designed to help you quickly get started. Designed with modularity, maintainability, and Shopify's best practices in mind.
+> E-commerce de nutrition sportive avec expérience personnalisée via quiz interactif
 
-<p align="center">
-  <a href="./LICENSE.md"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
-  <a href="./actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Shopify/skeleton-theme/actions/workflows/ci.yml/badge.svg"></a>
-</p>
+🔗 **Live Demo** : https://fitfuel-portfolio.myshopify.com  
+📁 **Repo** : github.com/TON-USER/fitfuel-theme
 
-## Getting started
+---
 
-### Prerequisites
+## Aperçu
 
-Before starting, ensure you have the latest Shopify CLI installed:
+![FitFuel Homepage](./screenshot.png)
 
-- [Shopify CLI](https://shopify.dev/docs/api/shopify-cli) – helps you download, upload, preview themes, and streamline your workflows
+FitFuel est une boutique Shopify custom spécialisée dans la vente de compléments alimentaires et produits de nutrition sportive. Elle se distingue par une expérience personnalisée permettant aux utilisateurs de recevoir des recommandations adaptées à leurs objectifs.
 
-If you use VS Code:
+---
 
-- [Shopify Liquid VS Code Extension](https://shopify.dev/docs/storefronts/themes/tools/shopify-liquid-vscode) – provides syntax highlighting, linting, inline documentation, and auto-completion specifically designed for Liquid templates
+## Features
 
-### Clone
+- **Quiz intelligent** — 4 étapes progressives avec recommandations produits personnalisées
+- **Catalogue produits** — Grille avec filtres dynamiques par catégorie (Protéines, Gainers, Brûleurs, Vitamines)
+- **Add to cart AJAX** — Ajout au panier sans rechargement de page
+- **Section Abonnement** — Plans achat unique vs mensuel avec économies
+- **Témoignages** — Section preuve sociale avec badges objectifs
+- **CTA Banner** — Bannière de conversion avec quiz trigger
+- **Nav fixe glassmorphism** — Compteur panier dynamique
+- **Footer complet** — Liens, réseaux sociaux, modes de paiement
+- **Responsive** — Mobile-first, adapté à tous les écrans
+- **Theme Editor compatible** — Toutes les sections sont configurables via l'éditeur Shopify sans toucher au code
 
-Clone this repository using Git or Shopify CLI:
+---
 
-```bash
-git clone git@github.com:Shopify/skeleton-theme.git
-# or
-shopify theme init
+## Stack technique
+
+| Couche | Techno |
+|--------|--------|
+| Plateforme | Shopify (Online Store 2.0) |
+| Templating | Liquid |
+| Frontend | HTML5, CSS3, JavaScript vanilla |
+| Thème base | Dawn (Shopify official) |
+| CLI | Shopify CLI 3.x |
+| Versioning | Git + GitHub |
+
+---
+
+## Architecture du thème
+
+```
+fitfuel-theme/
+├── assets/
+│   ├── fitfuel.css          # Design tokens, composants, animations
+│   └── fitfuel.js           # Quiz logic, AJAX cart, filtres, nav
+├── sections/
+│   ├── hero-fitfuel.liquid           # Hero homepage
+│   ├── quiz-teaser.liquid            # Section quiz teaser
+│   ├── featured-products-fitfuel.liquid  # Grille produits + filtres
+│   ├── subscription-fitfuel.liquid   # Plans abonnement
+│   ├── testimonials-fitfuel.liquid   # Témoignages clients
+│   └── cta-banner-fitfuel.liquid     # Bannière CTA finale
+├── layout/
+│   └── theme.liquid         # Layout global (nav + footer + quiz overlay)
+└── templates/
+    └── index.json           # Composition homepage
 ```
 
-### Preview
+---
 
-Preview this theme using Shopify CLI:
+## Design System
+
+- **Couleurs** : Noir `#080A0E` · Bleu `#00D4FF` · Vert `#00FF87`
+- **Typographie** : Barlow Condensed (display) + DM Sans (body)
+- **Style** : Dark athletic — énergique, moderne, fitness-oriented
+
+---
+
+## Installation locale
 
 ```bash
-shopify theme dev
+# Prérequis : Node.js 20+, Git, Shopify CLI
+
+# 1. Cloner le repo
+git clone https://github.com/TON-USER/fitfuel-theme.git
+cd fitfuel-theme
+
+# 2. Lancer le serveur de dev
+shopify theme dev --store TON-STORE.myshopify.com
+
+# 3. Ouvrir dans Chrome
+# http://127.0.0.1:9292
 ```
 
-## Theme architecture
+---
+
+## Déploiement
 
 ```bash
-.
-├── assets          # Stores static assets (CSS, JS, images, fonts, etc.)
-├── blocks          # Reusable, nestable, customizable UI components
-├── config          # Global theme settings and customization options
-├── layout          # Top-level wrappers for pages (layout templates)
-├── locales         # Translation files for theme internationalization
-├── sections        # Modular full-width page components
-├── snippets        # Reusable Liquid code or HTML fragments
-└── templates       # Templates combining sections to define page structures
+shopify theme push --store TON-STORE.myshopify.com
 ```
 
-To learn more, refer to the [theme architecture documentation](https://shopify.dev/docs/storefronts/themes/architecture).
+---
 
-### Templates
+## Roadmap (prochaines features)
 
-[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme.
+- [ ] Page Quiz `/pages/quiz` — version complète standalone
+- [ ] Page Collection `/collections` — filtres avancés + tri
+- [ ] Page Produit — FAQ accordion + toggle abonnement
+- [ ] Intégration Judge.me — avis clients réels
+- [ ] Intégration Klaviyo — email marketing automation
+- [ ] Intégration Recharge — abonnements récurrents
 
-The Skeleton Theme scaffolds [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) to make it easy for merchants to customize their store.
+---
 
-None of the template types are required, and not all of them are included in the Skeleton Theme. Refer to the [template types reference](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) for a full list.
+## Auteur
 
-### Sections
-
-[Sections](https://shopify.dev/docs/storefronts/themes/architecture/sections) are Liquid files that allow you to create reusable modules of content that can be customized by merchants. They can also include blocks which allow merchants to add, remove, and reorder content within a section.
-
-Sections are made customizable by including a `{% schema %}` in the body. For more information, refer to the [section schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema).
-
-### Blocks
-
-[Blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks) let developers create flexible layouts by breaking down sections into smaller, reusable pieces of Liquid. Each block has its own set of settings, and can be added, removed, and reordered within a section.
-
-Blocks are made customizable by including a `{% schema %}` in the body. For more information, refer to the [block schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/schema).
-
-## Schemas
-
-When developing components defined by schema settings, we recommend these guidelines to simplify your code:
-
-- **Single property settings**: For settings that correspond to a single CSS property, use CSS variables:
-
-  ```liquid
-  <div class="collection" style="--gap: {{ block.settings.gap }}px">
-    ...
-  </div>
-
-  {% stylesheet %}
-    .collection {
-      gap: var(--gap);
-    }
-  {% endstylesheet %}
-
-  {% schema %}
-  {
-    "settings": [{
-      "type": "range",
-      "label": "gap",
-      "id": "gap",
-      "min": 0,
-      "max": 100,
-      "unit": "px",
-      "default": 0,
-    }]
-  }
-  {% endschema %}
-  ```
-
-- **Multiple property settings**: For settings that control multiple CSS properties, use CSS classes:
-
-  ```liquid
-  <div class="collection {{ block.settings.layout }}">
-    ...
-  </div>
-
-  {% stylesheet %}
-    .collection--full-width {
-      /* multiple styles */
-    }
-    .collection--narrow {
-      /* multiple styles */
-    }
-  {% endstylesheet %}
-
-  {% schema %}
-  {
-    "settings": [{
-      "type": "select",
-      "id": "layout",
-      "label": "layout",
-      "values": [
-        { "value": "collection--full-width", "label": "t:options.full" },
-        { "value": "collection--narrow", "label": "t:options.narrow" }
-      ]
-    }]
-  }
-  {% endschema %}
-  ```
-
-## CSS & JavaScript
-
-For CSS and JavaScript, we recommend using the [`{% stylesheet %}`](https://shopify.dev/docs/api/liquid/tags#stylesheet) and [`{% javascript %}`](https://shopify.dev/docs/api/liquid/tags/javascript) tags. They can be included multiple times, but the code will only appear once.
-
-### `critical.css`
-
-The Skeleton Theme explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
-
-## Contributing
-
-We're excited for your contributions to the Skeleton Theme! This repository aims to remain as lean, lightweight, and fundamental as possible, and we kindly ask your contributions to align with this intention.
-
-Visit our [CONTRIBUTING.md](./CONTRIBUTING.md) for a detailed overview of our process, guidelines, and recommendations.
-
-## License
-
-Skeleton Theme is open-sourced under the [MIT](./LICENSE.md) License.
+Développé par **[Ton Nom]**  
+Portfolio : [ton-portfolio.com]  
+LinkedIn : [linkedin.com/in/ton-profil]
