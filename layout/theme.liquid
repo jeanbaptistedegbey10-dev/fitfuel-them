@@ -41,24 +41,8 @@
       {{ settings.type_header_font | font_face: font_display: 'swap' }}
     {% endstyle %}
 
-    {{- 'critical.css' | asset_url | stylesheet_tag -}}
+    {{- 'base.css' | asset_url | stylesheet_tag -}}
     {{- 'fitfuel.css' | asset_url | stylesheet_tag -}}
-    {{- 'fitfuel.js' | asset_url | stylesheet_tag -}}
-
-
-    <style>
-  /* Neutralise la grille 2 colonnes de Dawn */
-  .shopify-section        { display: block !important; grid-template-columns: unset !important; }
-  .shopify-section > *    { grid-column: unset !important; }
-  
-  /* Cache la nav et header Dawn natifs */
-  header-drawer,
-  .header-wrapper,
-  sticky-header           { display: none !important; }
-  
-  body                    { margin: 0; padding: 0; overflow-x: hidden; }
-  main#MainContent        { padding: 0 !important; margin: 0 !important; width: 100% !important; }
-</style>
   </head>
 
   <body class="gradient">
@@ -74,10 +58,10 @@
         </a>
 
         <ul class="ff-nav__links">
-          <li><a href="{{ routes.collections_url }}">Produits</a></li>
-          <li><a href="{{ pages['quiz'].url | default: '/pages/quiz' }}">Quiz</a></li>
-          <li><a href="#ff-subscription">Abonnement</a></li>
-          <li><a href="{{ pages['blog'].url | default: '/blogs/nutrition' }}">Blog</a></li>
+          <li><a href="/collections/all" {% if request.path contains '/collections' %}class="is-active"{% endif %}>Produits</a></li>
+          <li><a href="/pages/quiz" {% if request.path contains '/pages/quiz' %}class="is-active"{% endif %}>Quiz</a></li>
+          <li><a href="/pages/abonnement" {% if request.path contains '/pages/abonnement' %}class="is-active"{% endif %}>Abonnement</a></li>
+          <li><a href="/blogs/nutrition" {% if request.path contains '/blogs' %}class="is-active"{% endif %}>Blog</a></li>
         </ul>
 
         <div class="ff-nav__actions">
@@ -100,7 +84,7 @@
     </div>
     <!-- /nav -->
 
-    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1" style="padding-top:0;padding-left:0;padding-right:0;margin:0;max-width:100%;width:100%;">
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1" style="padding-top: 0;">
       {{ content_for_layout }}
     </main>
 
@@ -192,7 +176,7 @@
     </div>
     <!-- /quiz overlay -->
 
-    <script src="{{ 'fitfuel.js' | asset_url }}" defer></script>
+    {{- 'fitfuel.js' | asset_url | script_tag -}}
     <script>
       /* Mettre à jour le compteur panier au chargement */
       document.addEventListener('DOMContentLoaded', function() {

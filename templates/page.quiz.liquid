@@ -1,0 +1,375 @@
+{% comment %}
+  FitFuel — Page Quiz
+  Fichier : templates/page.quiz.liquid
+  URL : /pages/quiz
+{% endcomment %}
+
+<div class="ff-quiz-page" id="ff-quiz-page">
+
+  <!-- Background décoratif -->
+  <div class="ff-quiz-page__bg"></div>
+  <div class="ff-quiz-page__grid"></div>
+
+  <!-- Header quiz -->
+  <div class="ff-quiz-page__header">
+    <a href="/" class="ff-logo" style="text-decoration:none;">Fit<span>Fuel</span></a>
+    <div class="ff-quiz-page__header-right">
+      <span class="ff-quiz-page__step-counter" id="qp-step-counter">Étape 1 / 4</span>
+      <a href="/collections/all" class="ff-quiz-page__skip">Passer →</a>
+    </div>
+  </div>
+
+  <!-- Barre de progression globale -->
+  <div class="ff-quiz-page__progress">
+    <div class="ff-quiz-page__progress-fill" id="qp-progress" style="width: 0%;"></div>
+  </div>
+
+  <!-- Container des étapes -->
+  <div class="ff-quiz-page__container">
+
+    <!-- ÉTAPE 1 : Objectif -->
+    <div class="ff-quiz-step is-active" id="qp-step-1">
+      <div class="ff-quiz-step__content">
+        <span class="ff-quiz-step__num">01</span>
+        <h1 class="ff-quiz-step__question">Quel est ton<br><em>objectif principal ?</em></h1>
+        <p class="ff-quiz-step__sub">Nous allons personnaliser ton plan en fonction de ta réponse.</p>
+        <div class="ff-quiz-step__options ff-quiz-step__options--4">
+          <button class="ff-quiz-step__option" data-step="1" data-value="masse" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">💪</span>
+            <span class="ff-quiz-step__option-title">Prise de masse</span>
+            <span class="ff-quiz-step__option-sub">Gagner du muscle</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="1" data-value="poids" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🔥</span>
+            <span class="ff-quiz-step__option-title">Perte de poids</span>
+            <span class="ff-quiz-step__option-sub">Brûler la graisse</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="1" data-value="endurance" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">⚡</span>
+            <span class="ff-quiz-step__option-title">Endurance</span>
+            <span class="ff-quiz-step__option-sub">Courir plus vite</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="1" data-value="bienetre" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🧘</span>
+            <span class="ff-quiz-step__option-title">Bien-être</span>
+            <span class="ff-quiz-step__option-sub">Santé générale</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2 : Niveau -->
+    <div class="ff-quiz-step" id="qp-step-2">
+      <div class="ff-quiz-step__content">
+        <span class="ff-quiz-step__num">02</span>
+        <h1 class="ff-quiz-step__question">Quel est ton<br><em>niveau d'entraînement ?</em></h1>
+        <p class="ff-quiz-step__sub">Cela nous permet d'adapter les dosages recommandés.</p>
+        <div class="ff-quiz-step__options ff-quiz-step__options--4">
+          <button class="ff-quiz-step__option" data-step="2" data-value="debutant" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🌱</span>
+            <span class="ff-quiz-step__option-title">Débutant</span>
+            <span class="ff-quiz-step__option-sub">Moins de 6 mois</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="2" data-value="intermediaire" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🏋️</span>
+            <span class="ff-quiz-step__option-title">Intermédiaire</span>
+            <span class="ff-quiz-step__option-sub">6 mois – 2 ans</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="2" data-value="confirme" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🚀</span>
+            <span class="ff-quiz-step__option-title">Confirmé</span>
+            <span class="ff-quiz-step__option-sub">Plus de 2 ans</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="2" data-value="athlete" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🏆</span>
+            <span class="ff-quiz-step__option-title">Compétiteur</span>
+            <span class="ff-quiz-step__option-sub">Niveau élite</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3 : Fréquence -->
+    <div class="ff-quiz-step" id="qp-step-3">
+      <div class="ff-quiz-step__content">
+        <span class="ff-quiz-step__num">03</span>
+        <h1 class="ff-quiz-step__question">Combien de séances<br><em>par semaine ?</em></h1>
+        <p class="ff-quiz-step__sub">Pour optimiser ton protocole de supplémentation.</p>
+        <div class="ff-quiz-step__options ff-quiz-step__options--4">
+          <button class="ff-quiz-step__option" data-step="3" data-value="1-2" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🗓️</span>
+            <span class="ff-quiz-step__option-title">1 – 2 fois</span>
+            <span class="ff-quiz-step__option-sub">Programme léger</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="3" data-value="3-4" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">📅</span>
+            <span class="ff-quiz-step__option-title">3 – 4 fois</span>
+            <span class="ff-quiz-step__option-sub">Régulier</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="3" data-value="5-6" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">⚡</span>
+            <span class="ff-quiz-step__option-title">5 – 6 fois</span>
+            <span class="ff-quiz-step__option-sub">Intensif</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="3" data-value="7plus" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">🔥</span>
+            <span class="ff-quiz-step__option-title">7 fois +</span>
+            <span class="ff-quiz-step__option-sub">Athlète pro</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 : Budget -->
+    <div class="ff-quiz-step" id="qp-step-4">
+      <div class="ff-quiz-step__content">
+        <span class="ff-quiz-step__num">04</span>
+        <h1 class="ff-quiz-step__question">Quel est ton<br><em>budget mensuel ?</em></h1>
+        <p class="ff-quiz-step__sub">Pour te recommander le meilleur rapport qualité/prix.</p>
+        <div class="ff-quiz-step__options ff-quiz-step__options--3">
+          <button class="ff-quiz-step__option" data-step="4" data-value="small" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">💶</span>
+            <span class="ff-quiz-step__option-title">Moins de 30€</span>
+            <span class="ff-quiz-step__option-sub">Essentiel</span>
+          </button>
+          <button class="ff-quiz-step__option ff-quiz-step__option--featured" data-step="4" data-value="medium" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-badge">Populaire</span>
+            <span class="ff-quiz-step__option-icon">💰</span>
+            <span class="ff-quiz-step__option-title">30€ – 60€</span>
+            <span class="ff-quiz-step__option-sub">Plan complet</span>
+          </button>
+          <button class="ff-quiz-step__option" data-step="4" data-value="large" onclick="qpSelect(this)">
+            <span class="ff-quiz-step__option-icon">💎</span>
+            <span class="ff-quiz-step__option-title">Plus de 60€</span>
+            <span class="ff-quiz-step__option-sub">Premium</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE RÉSULTAT -->
+    <div class="ff-quiz-step" id="qp-step-result">
+      <div class="ff-quiz-step__content ff-quiz-result">
+
+        <div class="ff-quiz-result__icon">✅</div>
+        <h1 class="ff-quiz-result__title" id="qp-result-title">Ton plan Prise de Masse</h1>
+        <p class="ff-quiz-result__sub">Basé sur ton profil, voici les 3 produits qu'on te recommande :</p>
+
+        <div class="ff-quiz-result__products" id="qp-result-products">
+          <!-- Rempli par JS -->
+        </div>
+
+        <div class="ff-quiz-result__profile" id="qp-result-profile">
+          <!-- Rempli par JS -->
+        </div>
+
+        <div class="ff-quiz-result__actions">
+          <a id="qp-result-cta" href="/collections/all" class="ff-btn ff-btn--primary" style="justify-content:center; font-size: 1.1rem; padding: 1.1rem 2.5rem;">
+            Voir mon plan complet →
+          </a>
+          <button onclick="qpRestart()" class="ff-btn ff-btn--outline" style="font-size: 0.9rem;">
+            Recommencer
+          </button>
+        </div>
+
+        <p class="ff-quiz-result__guarantee">
+          🚚 Livraison gratuite dès 50€ &nbsp;·&nbsp; ✅ Satisfait ou remboursé 30 jours
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navigation prev/next (visible sur étapes 2+) -->
+  <div class="ff-quiz-page__nav" id="qp-nav" style="display:none;">
+    <button class="ff-quiz-page__prev" id="qp-prev" onclick="qpPrev()">← Précédent</button>
+  </div>
+
+</div>
+
+<script>
+const QP_TOTAL_STEPS = 4;
+let qpCurrentStep = 1;
+let qpAnswers = {};
+
+const QP_PRODUCTS = {
+  masse:     [
+    { name: 'Whey Pure Pro',      price: '34,90€', tag: 'Protéines' },
+    { name: 'Mass Builder X',     price: '47,90€', tag: 'Gainers' },
+    { name: 'MultiSport Complex', price: '22,90€', tag: 'Vitamines' }
+  ],
+  poids:     [
+    { name: 'ThermoFuel Elite',   price: '29,90€', tag: 'Brûleurs' },
+    { name: 'Whey Pure Pro',      price: '34,90€', tag: 'Protéines' },
+    { name: 'MultiSport Complex', price: '22,90€', tag: 'Vitamines' }
+  ],
+  endurance: [
+    { name: 'Whey Pure Pro',      price: '34,90€', tag: 'Protéines' },
+    { name: 'MultiSport Complex', price: '22,90€', tag: 'Vitamines' },
+    { name: 'ThermoFuel Elite',   price: '29,90€', tag: 'Brûleurs' }
+  ],
+  bienetre:  [
+    { name: 'MultiSport Complex', price: '22,90€', tag: 'Vitamines' },
+    { name: 'Whey Pure Pro',      price: '34,90€', tag: 'Protéines' },
+    { name: 'ThermoFuel Elite',   price: '29,90€', tag: 'Brûleurs' }
+  ]
+};
+
+const QP_LABELS = {
+  masse: 'Prise de Masse', poids: 'Perte de Poids',
+  endurance: 'Endurance',  bienetre: 'Bien-être'
+};
+
+const QP_LEVEL_LABELS = {
+  debutant: 'Débutant', intermediaire: 'Intermédiaire',
+  confirme: 'Confirmé', athlete: 'Compétiteur'
+};
+
+const QP_FREQ_LABELS = {
+  '1-2': '1–2 séances/sem', '3-4': '3–4 séances/sem',
+  '5-6': '5–6 séances/sem', '7plus': '7+ séances/sem'
+};
+
+const QP_BUDGET_LABELS = {
+  small: 'Moins de 30€/mois', medium: '30–60€/mois', large: '60€+/mois'
+};
+
+function qpSelect(btn) {
+  const step = parseInt(btn.dataset.step);
+  const value = btn.dataset.value;
+
+  // Highlight
+  btn.closest('.ff-quiz-step__options').querySelectorAll('.ff-quiz-step__option')
+    .forEach(b => b.classList.remove('is-selected'));
+  btn.classList.add('is-selected');
+
+  // Sauvegarder
+  if (step === 1) qpAnswers.objective = value;
+  if (step === 2) qpAnswers.level = value;
+  if (step === 3) qpAnswers.frequency = value;
+  if (step === 4) qpAnswers.budget = value;
+
+  // Auto-avance après délai
+  setTimeout(() => qpNext(), 420);
+}
+
+function qpNext() {
+  if (qpCurrentStep < QP_TOTAL_STEPS) {
+    qpGoToStep(qpCurrentStep + 1);
+  } else {
+    qpShowResult();
+  }
+}
+
+function qpPrev() {
+  if (qpCurrentStep > 1) qpGoToStep(qpCurrentStep - 1);
+}
+
+function qpGoToStep(n) {
+  // Sortie
+  const currentEl = document.getElementById('qp-step-' + qpCurrentStep);
+  currentEl.classList.add('is-exiting');
+  setTimeout(() => {
+    currentEl.classList.remove('is-active', 'is-exiting');
+    qpCurrentStep = n;
+    // Entrée
+    const nextEl = document.getElementById('qp-step-' + qpCurrentStep);
+    nextEl.classList.add('is-active');
+    qpUpdateUI();
+  }, 300);
+}
+
+function qpUpdateUI() {
+  // Progress bar
+  const pct = ((qpCurrentStep - 1) / QP_TOTAL_STEPS) * 100;
+  document.getElementById('qp-progress').style.width = pct + '%';
+
+  // Counter
+  document.getElementById('qp-step-counter').textContent =
+    'Étape ' + qpCurrentStep + ' / ' + QP_TOTAL_STEPS;
+
+  // Bouton précédent
+  const nav = document.getElementById('qp-nav');
+  nav.style.display = qpCurrentStep > 1 ? 'flex' : 'none';
+}
+
+function qpShowResult() {
+  // Sortie dernière étape
+  const currentEl = document.getElementById('qp-step-' + qpCurrentStep);
+  currentEl.classList.add('is-exiting');
+
+  setTimeout(() => {
+    currentEl.classList.remove('is-active', 'is-exiting');
+
+    // Progress 100%
+    document.getElementById('qp-progress').style.width = '100%';
+    document.getElementById('qp-step-counter').textContent = 'Résultats';
+    document.getElementById('qp-nav').style.display = 'none';
+
+    const obj = qpAnswers.objective || 'masse';
+    const products = QP_PRODUCTS[obj] || QP_PRODUCTS.masse;
+    const label = QP_LABELS[obj] || 'Personnalisé';
+
+    // Titre
+    document.getElementById('qp-result-title').textContent = 'Ton plan ' + label;
+
+    // CTA link
+    document.getElementById('qp-result-cta').href =
+      '/collections/all?sort_by=best-selling';
+
+    // Produits recommandés
+    document.getElementById('qp-result-products').innerHTML = products.map(p => `
+      <div class="ff-quiz-result__product">
+        <div class="ff-quiz-result__product-left">
+          <span class="ff-quiz-result__product-tag">${p.tag}</span>
+          <span class="ff-quiz-result__product-name">${p.name}</span>
+        </div>
+        <span class="ff-quiz-result__product-price">${p.price}</span>
+      </div>
+    `).join('');
+
+    // Profil résumé
+    document.getElementById('qp-result-profile').innerHTML = `
+      <div class="ff-quiz-result__profile-item">
+        <span class="ff-quiz-result__profile-label">Objectif</span>
+        <span class="ff-quiz-result__profile-value">${QP_LABELS[qpAnswers.objective] || '–'}</span>
+      </div>
+      <div class="ff-quiz-result__profile-item">
+        <span class="ff-quiz-result__profile-label">Niveau</span>
+        <span class="ff-quiz-result__profile-value">${QP_LEVEL_LABELS[qpAnswers.level] || '–'}</span>
+      </div>
+      <div class="ff-quiz-result__profile-item">
+        <span class="ff-quiz-result__profile-label">Fréquence</span>
+        <span class="ff-quiz-result__profile-value">${QP_FREQ_LABELS[qpAnswers.frequency] || '–'}</span>
+      </div>
+      <div class="ff-quiz-result__profile-item">
+        <span class="ff-quiz-result__profile-label">Budget</span>
+        <span class="ff-quiz-result__profile-value">${QP_BUDGET_LABELS[qpAnswers.budget] || '–'}</span>
+      </div>
+    `;
+
+    // Sauvegarder en sessionStorage
+    sessionStorage.setItem('ff_quiz_result', JSON.stringify(qpAnswers));
+
+    // Afficher résultat
+    document.getElementById('qp-step-result').classList.add('is-active');
+  }, 300);
+}
+
+function qpRestart() {
+  qpAnswers = {};
+  qpCurrentStep = 1;
+  document.querySelectorAll('.ff-quiz-step').forEach(s => {
+    s.classList.remove('is-active', 'is-exiting');
+    s.querySelectorAll('.ff-quiz-step__option').forEach(o => o.classList.remove('is-selected'));
+  });
+  document.getElementById('qp-step-1').classList.add('is-active');
+  document.getElementById('qp-progress').style.width = '0%';
+  document.getElementById('qp-step-counter').textContent = 'Étape 1 / 4';
+  document.getElementById('qp-nav').style.display = 'none';
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', qpUpdateUI);
+</script>
